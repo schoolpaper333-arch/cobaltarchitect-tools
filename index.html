@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-cobalt_위임관리보드_v5.html — v1, 2026-10-28
+cobalt_위임관리보드_v6.html — v1, 2026-10-28
 
 MIT License
 
@@ -66,6 +66,7 @@ SOFTWARE.
   <button type="button" data-tab="ledger">맡긴 일 목록</button>
   <button type="button" data-tab="check">확인 기록</button>
   <button type="button" data-tab="overview">한눈에 보기</button>
+  <button type="button" data-tab="guide">사용법</button>
 </div>
 <button type="button" class="action" id="exampleBtn">예시 넣기</button>
 <button type="button" class="ghost" id="exportBtn">JSON 내보내기</button>
@@ -141,6 +142,15 @@ SOFTWARE.
     <p class="muted">핵심 업무는 가끔 직접 해 보며 감을 잃지 않습니다.</p>
   </div>
 </section>
+<section id="tab-guide" hidden>
+  <h2>사용법</h2>
+  <div class="card"><h3>1. 서류 진단</h3><p>서류 이름과 “이 서류는 왜 있나”를 적고, 질문 세 개에 답합니다.</p></div>
+  <div class="card"><h3>2. 4칸 분류</h3><p>질문 순서대로 자동 분류됩니다. 없앨 후보 / AI에게 맡김 / AI 초안 + 사람 결정 / 사람이 직접. 잘 모르겠으면 사람이 직접으로 분류됩니다.</p></div>
+  <div class="card"><h3>3. 맡긴 일 목록</h3><p>AI에게 맡김 또는 AI 초안 + 사람 결정인 서류만 목록에 붙일 수 있습니다. 에이전트 이름과 맡긴 일을 적으면 됩니다.</p></div>
+  <div class="card"><h3>4. 확인 기록</h3><p>무엇을 살펴봤는지 한 줄을 적어야 저장됩니다. 확인했다는 표시만 남기지 않습니다.</p></div>
+  <div class="card"><h3>5. 한눈에 보기</h3><p>분류별 개수, 에이전트별 마지막 확인일, 확인 주기가 지난 표시를 봅니다. 이번 달 핵심 업무를 직접 해 봤는지 체크합니다.</p></div>
+  <p class="muted">예시 넣기 버튼을 누르면 서류 5개와 목록, 확인 기록이 바로 채워집니다. JSON 내보내기로 파일을 저장해 두면 다른 기기에서도 불러올 수 있습니다.</p>
+</section>
 </main>
 
 <footer>
@@ -212,7 +222,7 @@ window.removeAgent = function(i){ state.agents.splice(i,1); save(); };
 window.removeCheck = function(i){ state.checks.splice(i,1); save(); };
 function showTab(name){
   document.querySelectorAll(".tabs button").forEach(function(b){ b.classList.toggle("active", b.dataset.tab===name); });
-  ["diag","ledger","check","overview"].forEach(function(t){ document.getElementById("tab-"+t).hidden = (t!==name); });
+  ["diag","ledger","check","overview","guide"].forEach(function(t){ document.getElementById("tab-"+t).hidden = (t!==name); });
   if(name==="overview") render();
 }
 document.querySelectorAll(".tabs button").forEach(function(b){ b.addEventListener("click", function(){ showTab(b.dataset.tab); }); });
