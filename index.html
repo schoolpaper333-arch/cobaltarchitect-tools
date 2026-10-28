@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-cobalt_위임관리보드_v3.html — v1, 2026-10-28
+cobalt_위임관리보드_v4.html — v1, 2026-10-28
 
 MIT License
 
@@ -63,7 +63,7 @@ SOFTWARE.
 <p>서류마다 왜 있는지부터 묻고, 없앨 것 · AI에게 맡길 것 · 사람이 정할 것으로 나눕니다. 에이전트에게 맡긴 일과 확인한 내용을 적어 둡니다.</p>
 <div class="tabs" role="tablist">
   <button type="button" class="active" data-tab="diag">서류 진단</button>
-  <button type="button" data-tab="ledger">위임 장부</button>
+  <button type="button" data-tab="ledger">맡긴 일 목록</button>
   <button type="button" data-tab="check">확인 기록</button>
   <button type="button" data-tab="overview">한눈에 보기</button>
 </div>
@@ -102,7 +102,7 @@ SOFTWARE.
 </section>
 
 <section id="tab-ledger" hidden>
-  <h2>위임 장부</h2><p class="muted">이름과 맡긴 일만 적으면 됩니다. 범위와 확인 주기는 기본값(초안까지 · 매번)으로 들어갑니다.</p>
+  <h2>맡긴 일 목록</h2><p class="muted">이름과 맡긴 일만 적으면 됩니다. 범위와 확인 주기는 기본값(초안까지 · 매번)으로 들어갑니다.</p>
   <label for="agentName">에이전트 이름</label>
   <input type="text" id="agentName" placeholder="예: 문서 초안 에이전트">
   <label for="agentTask">맡긴 일</label>
@@ -120,7 +120,7 @@ SOFTWARE.
   <label for="agentNot">맡기지 않을 일</label>
   <input type="text" id="agentNot" placeholder="예: 최종 결정, 외부 발송">
   <label><input type="checkbox" id="agentHard"> 되돌리기 어려운 일입니다</label>
-  <div><button type="button" class="action" id="addAgentBtn">장부에 추가하기</button></div>
+  <div><button type="button" class="action" id="addAgentBtn">목록에 추가하기</button></div>
   <div id="agentList"></div>
 </section>
 
@@ -173,12 +173,14 @@ function render(){
   document.getElementById("monthlyDirect").checked = !!state.monthlyDirect;
   var dl = document.getElementById("diagList");
   dl.innerHTML = state.docs.length ? state.docs.map(function(d,i){
-    return '<div class="card"><strong>'+esc(d.name)+'</strong> <span class="badge">'+esc(d.cat)+'</span><p class="muted">'+esc(d.purpose)+'</p><p>'+esc(d.why)+'</p><button type="button" class="ghost" onclick="toLedger('+i+')">위임 장부에 붙이기</button> <button type="button" class="ghost" onclick="removeDoc('+i+')">지우기</button></div>';
+    var canAttach = (d.cat==="AI에게 맡김 (사람 확인)" || d.cat==="AI 초안 + 사람 결정");
+    var attachHtml = canAttach ? '<button type="button" class="ghost" onclick="toLedger('+i+')">맡긴 일 목록에 붙이기</button> ' : '<p class="muted">AI에게 맡기는 일이 아니라 목록에 붙이지 않습니다.</p>';
+    return '<div class="card"><strong>'+esc(d.name)+'</strong> <span class="badge">'+esc(d.cat)+'</span><p class="muted">'+esc(d.purpose)+'</p><p>'+esc(d.why)+'</p>'+attachHtml+'<button type="button" class="ghost" onclick="removeDoc('+i+')">지우기</button></div>';
   }).join("") : "<p>아직 진단한 서류가 없습니다.</p>";
   var al = document.getElementById("agentList");
   al.innerHTML = state.agents.length ? state.agents.map(function(a,i){
     return '<div class="card"><strong>'+esc(a.name)+'</strong> '+(a.hard?'<span class="badge">사람 승인 필수</span>':"")+'<p>맡긴 일: '+esc(a.task)+'</p><p>범위: '+esc(a.scope)+' · 확인 주기: '+esc(a.cycle)+'</p><p>맡기지 않을 일: '+esc(a.not)+'</p><button type="button" class="ghost" onclick="removeAgent('+i+')">지우기</button></div>';
-  }).join("") : "<p>아직 장부에 등록한 에이전트가 없습니다.</p>";
+  }).join("") : "<p>아직 목록에 등록한 에이전트가 없습니다.</p>";
   var cl = document.getElementById("checkList");
   cl.innerHTML = state.checks.length ? state.checks.map(function(c,i){
     return '<div class="card"><strong>'+esc(c.date)+'</strong> · '+esc(c.agent)+' · '+esc(c.result)+'<p>'+esc(c.what)+'</p><button type="button" class="ghost" onclick="removeCheck('+i+')">지우기</button></div>';
@@ -207,7 +209,7 @@ function render(){
 }
 window.toLedger = function(i){
   var d = state.docs[i];
-  if(d.cat!=="AI에게 맡김 (사람 확인)" && d.cat!=="AI 초안 + 사람 결정"){ alert("AI에게 맡김 또는 AI 초안 + 사람 결정인 서류만 장부에 붙일 수 있습니다."); return; }
+  if(d.cat!=="AI에게 맡김 (사람 확인)" && d.cat!=="AI 초안 + 사람 결정"){ alert("AI에게 맡김 또는 AI 초안 + 사람 결정인 서류만 목록에 붙일 수 있습니다."); return; }
   state.agents.push({name:"문서 에이전트", task:d.name, scope:d.cat==="AI 초안 + 사람 결정"?"초안까지":"취합 · 대조", not:"최종 결정", hard:d.cat==="AI 초안 + 사람 결정", cycle:"매번"});
   save(); showTab("ledger");
 };
