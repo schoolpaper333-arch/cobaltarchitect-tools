@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-cobalt_위임관리보드_v4.html — v1, 2026-10-28
+cobalt_위임관리보드_v5.html — v1, 2026-10-28
 
 MIT License
 
@@ -82,16 +82,10 @@ SOFTWARE.
   <input type="text" id="docName" placeholder="예: 회의 결과 보고서">
   <label for="docPurpose">이 서류는 왜 있나 (목적 한 줄)</label>
   <input type="text" id="docPurpose" placeholder="예: 회의에서 정한 일을 남기기 위해">
-  <div class="row">
-    <div>
-      <label for="qA">(가) 이 서류가 없어도 일이 되나</label>
-      <select id="qA"><option value="no">아니오</option><option value="yes">예</option></select>
-    </div>
-    <div>
-      <label for="qB">(나) 정해진 양식 · 반복 문장 · 자료 취합 · 대조가 대부분인가</label>
-      <select id="qB"><option value="no">아니오</option><option value="yes">예</option></select>
-    </div>
-  </div>
+  <label for="qA">(가) 이 서류가 없어도 일이 되나</label>
+  <select id="qA"><option value="no">아니오</option><option value="yes">예</option></select>
+  <label for="qB">(나) 정해진 양식 · 반복 문장 · 자료 취합 · 대조가 대부분인가</label>
+  <select id="qB"><option value="no">아니오</option><option value="yes">예</option></select>
   <label for="qC">(다) 누군가의 삶이 바뀌는 결정이 들어 있나</label>
   <p class="muted">예: 지원 탈락, 허가 거부, 징계, 급여·평가에 영향이 있는 경우. 아니오: 내부 보고서 작성, 자료 취합만 하는 경우. 잘 모르겠으면 “모르겠음”을 고르세요. 모르면 사람이 직접으로 분류합니다.</p>
   <select id="qC"><option value="no">아니오</option><option value="yes">예</option><option value="unknown">모르겠음</option></select>
